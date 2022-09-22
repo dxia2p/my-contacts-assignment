@@ -34,6 +34,8 @@ function goBtnHandler() {
     displayByName();
   } else if (selection === 'display-country') {
     displayByCountry();
+  }else if(selection === 'search-email'){
+    displayByEmail();
   }
 }
 
@@ -50,6 +52,10 @@ function displayContacts() {
 function addContact() {
   let name = prompt("ENETER NAME");
   let email = prompt("ENTER EMAIL");
+  if(findByEmail(email) != -1){
+    alert("THAT EMAIL HAS ALREADY BEEN USED!");
+    return;
+  }
   let phone = prompt("ENTER PHONE NUMBER");
   let country = prompt("ENTER COUNTRY");
   contacts.push(new Contact(name, email, phone, country));
@@ -57,8 +63,9 @@ function addContact() {
 }
 
 function removeContact() {
-  let deleteNumber = prompt("WHAT CONTACT TO DELETE?");
-  contacts.splice(deleteNumber, 1);
+  let deleteEmail = prompt("ENTER EMAIL OF CONTACT TO DELETE");
+  let index = findByEmail(deleteEmail);
+  contacts.splice(index, 1);
 }
 
 function displayByName() {
@@ -87,12 +94,32 @@ function displayByCountry() {
   outputEl.innerHTML = output;
 }
 
+function displayByEmail(){
+  let email = prompt("ENTER EMAIL");
+  let emailIdx = findByEmail(email);
+  if(emailIdx != -1){
+    outputEl.innerHTML = returnContactStr(contacts[emailIdx], 0);
+  }else{
+    outputEl.innerHTML = "";
+  }
+}
+
+// helper functions
 function returnContactStr(contact, i){
   return `<div>
     ${i}: ${contact.name} <br>
     ${contact.email} <br>
     ${contact.phone} (${contact.country})
   </div>`;
+}
+
+function findByEmail(email){
+  for(let i = 0; i < contacts.length; i++){
+    if(contacts[i].email === email){
+      return i;
+    }
+  }
+  return -1;
 }
 
 function saveContacts(){
