@@ -71,11 +71,14 @@ function removeContact() {
 function displayByName() {
   let name = prompt("ENTER NAME");
   let output = '';
-  let j = 0;
+  let idx = 0;
   for(let i = 0; i < contacts.length; i++){
-    if(contacts[i].name === name){
-      output += returnContactStr(contacts[i], j);
-      j++;
+    for(let j = 0; j < contacts[i].name.length - name.length + 1; j++){
+      if(contacts[i].name.substring(j, j + name.length) === name){
+
+        output += returnContactStr(contacts[i], idx);
+        idx++;
+      }
     }
   }
   outputEl.innerHTML = output;
@@ -97,7 +100,7 @@ function displayByCountry() {
 function displayByEmail(){
   let email = prompt("ENTER EMAIL");
   let emailIdx = findByEmail(email);
-  if(emailIdx != -1){
+  if(emailIdx !== -1){
     outputEl.innerHTML = returnContactStr(contacts[emailIdx], 0);
   }else{
     outputEl.innerHTML = "";
