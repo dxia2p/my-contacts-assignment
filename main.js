@@ -50,22 +50,29 @@ function displayContacts() {
 
 
 function addContact() {
-  let name = prompt("ENETER NAME");
   let email = prompt("ENTER EMAIL");
   if(findByEmail(email) != -1){
-    alert("THAT EMAIL HAS ALREADY BEEN USED!");
+    outputEl.innerHTML = "Email Already in use (" + email + ")";
     return;
   }
+  let name = prompt("ENTER NAME");
   let phone = prompt("ENTER PHONE NUMBER");
   let country = prompt("ENTER COUNTRY");
   contacts.push(new Contact(name, email, phone, country));
   saveContacts();
+  outputEl.innerHTML = "New Contact Added (" + name + ")";
 }
 
 function removeContact() {
-  let deleteEmail = prompt("ENTER EMAIL OF CONTACT TO DELETE");
-  let index = findByEmail(deleteEmail);
+  let email = prompt("ENTER EMAIL OF CONTACT TO DELETE");
+  let index = findByEmail(email);
+  if(index === -1){
+    outputEl.innerHTML = "Email does not exist";
+    return;
+  }
   contacts.splice(index, 1);
+  saveContacts();
+  outputEl.innerHTML = "Contact Removed (" + email + ")";
 }
 
 function displayByName() {
@@ -73,19 +80,16 @@ function displayByName() {
   let output = '';
   let idx = 0;
   for(let i = 0; i < contacts.length; i++){
-    for(let j = 0; j < contacts[i].name.length - name.length + 1; j++){
-      if(contacts[i].name.substring(j, j + name.length) === name){
-
-        output += returnContactStr(contacts[i], idx);
-        idx++;
-      }
+    if(contacts[i].name.includes(name)){
+      output += returnContactStr(contacts[i], idx);
+      idx++;
     }
   }
   outputEl.innerHTML = output;
 }
 
 function displayByCountry() {
-  let country = prompt("ENTER COUNTR");
+  let country = prompt("ENTER COUNTRY");
   let output = '';
   let j = 0;
   for(let i = 0; i < contacts.length; i++){
