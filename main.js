@@ -1,6 +1,6 @@
 // My Contacts Basic
 
-class Contact{
+class Contact{ // Contact class
   constructor(name, email, phone, country){
     this.name = name;
     this.email = email;
@@ -50,14 +50,16 @@ function displayContacts() {
 
 
 function addContact() {
+  // gets data
   let email = prompt("ENTER EMAIL");
-  if(findByEmail(email) != -1){
+  if(findByEmail(email) != -1){ // checks if email is already taken
     outputEl.innerHTML = "Email Already in use (" + email + ")";
     return;
   }
   let name = prompt("ENTER NAME");
   let phone = prompt("ENTER PHONE NUMBER");
   let country = prompt("ENTER COUNTRY");
+  // adds contact to contacts array
   contacts.push(new Contact(name, email, phone, country));
   saveContacts();
   outputEl.innerHTML = "New Contact Added (" + name + ")";
@@ -66,11 +68,11 @@ function addContact() {
 function removeContact() {
   let email = prompt("ENTER EMAIL OF CONTACT TO DELETE");
   let index = findByEmail(email);
-  if(index === -1){
+  if(index === -1){ // checks if email exists
     outputEl.innerHTML = "Email does not exist";
     return;
   }
-  contacts.splice(index, 1);
+  contacts.splice(index, 1); // remove contact from array
   saveContacts();
   outputEl.innerHTML = "Contact Removed (" + email + ")";
 }
@@ -79,7 +81,7 @@ function displayByName() {
   let name = prompt("ENTER NAME");
   let output = '';
   let idx = 0;
-  for(let i = 0; i < contacts.length; i++){
+  for(let i = 0; i < contacts.length; i++){ // loop through all contacts and if input is a substring of the contact's name, display it
     if(contacts[i].name.includes(name)){
       output += returnContactStr(contacts[i], idx);
       idx++;
@@ -92,7 +94,7 @@ function displayByCountry() {
   let country = prompt("ENTER COUNTRY");
   let output = '';
   let j = 0;
-  for(let i = 0; i < contacts.length; i++){
+  for(let i = 0; i < contacts.length; i++){ // loops through all contacts and checks if the contact's country matches the country inputed
     if(contacts[i].country === country){
       output += returnContactStr(contacts[i], j);
       j++;
@@ -113,6 +115,7 @@ function displayByEmail(){
 
 // helper functions
 function returnContactStr(contact, i){
+  // returns a string with all the contact's information in html
   return `<div>
     ${i}: ${contact.name} <br>
     ${contact.email} <br>
@@ -128,7 +131,7 @@ function findByEmail(email){
   }
   return -1;
 }
-
+// Saves and loads data from local storage
 function saveContacts(){
   localStorage.setItem("contacts", JSON.stringify(contacts));
 }
